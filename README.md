@@ -1,1 +1,0 @@
-# Sensifai-Smart-Gallery
