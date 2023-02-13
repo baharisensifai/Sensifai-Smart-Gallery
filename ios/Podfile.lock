@@ -1,0 +1,143 @@
+PODS:
+  - connectivity_plus (0.0.1):
+    - Flutter
+    - ReachabilitySwift
+  - device_info_plus (0.0.1):
+    - Flutter
+  - dropbox_client (1.0.0):
+    - Flutter
+    - ObjectiveDropboxOfficial
+  - Flutter (1.0.0)
+  - flutter_foreground_task (0.0.1):
+    - Flutter
+  - flutter_native_splash (0.0.1):
+    - Flutter
+  - flutter_photo_editor (0.0.1):
+    - Flutter
+    - ZLImageEditor
+  - FMDB (2.7.5):
+    - FMDB/standard (= 2.7.5)
+  - FMDB/standard (2.7.5)
+  - google_maps_flutter_ios (0.0.1):
+    - Flutter
+    - GoogleMaps
+  - GoogleMaps (5.2.0):
+    - GoogleMaps/Maps (= 5.2.0)
+  - GoogleMaps/Base (5.2.0)
+  - GoogleMaps/Maps (5.2.0):
+    - GoogleMaps/Base
+  - ObjectiveDropboxOfficial (7.0.0)
+  - open_file_plus (0.0.1):
+    - Flutter
+  - path_provider_ios (0.0.1):
+    - Flutter
+  - permission_handler_apple (9.0.4):
+    - Flutter
+  - photo_gallery (0.0.1):
+    - Flutter
+  - ReachabilitySwift (5.0.0)
+  - share_plus (0.0.1):
+    - Flutter
+  - shared_preferences_ios (0.0.1):
+    - Flutter
+  - sqflite (0.0.2):
+    - Flutter
+    - FMDB (>= 2.7.5)
+  - system_settings (0.0.1):
+    - Flutter
+  - workmanager (0.0.1):
+    - Flutter
+  - ZLImageEditor (1.1.6):
+    - ZLImageEditor/Core (= 1.1.6)
+  - ZLImageEditor/Core (1.1.6)
+
+DEPENDENCIES:
+  - connectivity_plus (from `.symlinks/plugins/connectivity_plus/ios`)
+  - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
+  - dropbox_client (from `.symlinks/plugins/dropbox_client/ios`)
+  - Flutter (from `Flutter`)
+  - flutter_foreground_task (from `.symlinks/plugins/flutter_foreground_task/ios`)
+  - flutter_native_splash (from `.symlinks/plugins/flutter_native_splash/ios`)
+  - flutter_photo_editor (from `.symlinks/plugins/flutter_photo_editor/ios`)
+  - google_maps_flutter_ios (from `.symlinks/plugins/google_maps_flutter_ios/ios`)
+  - open_file_plus (from `.symlinks/plugins/open_file_plus/ios`)
+  - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
+  - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
+  - photo_gallery (from `.symlinks/plugins/photo_gallery/ios`)
+  - share_plus (from `.symlinks/plugins/share_plus/ios`)
+  - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
+  - sqflite (from `.symlinks/plugins/sqflite/ios`)
+  - system_settings (from `.symlinks/plugins/system_settings/ios`)
+  - workmanager (from `.symlinks/plugins/workmanager/ios`)
+
+SPEC REPOS:
+  trunk:
+    - FMDB
+    - GoogleMaps
+    - ObjectiveDropboxOfficial
+    - ReachabilitySwift
+    - ZLImageEditor
+
+EXTERNAL SOURCES:
+  connectivity_plus:
+    :path: ".symlinks/plugins/connectivity_plus/ios"
+  device_info_plus:
+    :path: ".symlinks/plugins/device_info_plus/ios"
+  dropbox_client:
+    :path: ".symlinks/plugins/dropbox_client/ios"
+  Flutter:
+    :path: Flutter
+  flutter_foreground_task:
+    :path: ".symlinks/plugins/flutter_foreground_task/ios"
+  flutter_native_splash:
+    :path: ".symlinks/plugins/flutter_native_splash/ios"
+  flutter_photo_editor:
+    :path: ".symlinks/plugins/flutter_photo_editor/ios"
+  google_maps_flutter_ios:
+    :path: ".symlinks/plugins/google_maps_flutter_ios/ios"
+  open_file_plus:
+    :path: ".symlinks/plugins/open_file_plus/ios"
+  path_provider_ios:
+    :path: ".symlinks/plugins/path_provider_ios/ios"
+  permission_handler_apple:
+    :path: ".symlinks/plugins/permission_handler_apple/ios"
+  photo_gallery:
+    :path: ".symlinks/plugins/photo_gallery/ios"
+  share_plus:
+    :path: ".symlinks/plugins/share_plus/ios"
+  shared_preferences_ios:
+    :path: ".symlinks/plugins/shared_preferences_ios/ios"
+  sqflite:
+    :path: ".symlinks/plugins/sqflite/ios"
+  system_settings:
+    :path: ".symlinks/plugins/system_settings/ios"
+  workmanager:
+    :path: ".symlinks/plugins/workmanager/ios"
+
+SPEC CHECKSUMS:
+  connectivity_plus: 413a8857dd5d9f1c399a39130850d02fe0feaf7e
+  device_info_plus: e5c5da33f982a436e103237c0c85f9031142abed
+  dropbox_client: d876dfb94067101d8ae69130e866b48cff9f5f84
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  flutter_foreground_task: 21ef182ab0a29a3005cc72cd70e5f45cb7f7f817
+  flutter_native_splash: 52501b97d1c0a5f898d687f1646226c1f93c56ef
+  flutter_photo_editor: 68c19bcfdddfbd00804cf835db837fe623d4c679
+  FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
+  google_maps_flutter_ios: 66201f392bf62d500f07670a30488a247b9bb5b9
+  GoogleMaps: 025272d5876d3b32604e5c080dc25eaf68764693
+  ObjectiveDropboxOfficial: cf39e37372f59c270aad869604dce20f11b877f5
+  open_file_plus: edbaa63200aacd7b6223f816bfcda24206db9c34
+  path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02
+  permission_handler_apple: 44366e37eaf29454a1e7b1b7d736c2cceaeb17ce
+  photo_gallery: 9f95e57747cd22c10676ece3660d1ffe6c603ee5
+  ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
+  share_plus: 056a1e8ac890df3e33cb503afffaf1e9b4fbae68
+  shared_preferences_ios: 548a61f8053b9b8a49ac19c1ffbc8b92c50d68ad
+  sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
+  system_settings: 8f5cdbfa72c677fc8d665b863bcc20d393d87e9d
+  workmanager: 0afdcf5628bbde6924c21af7836fed07b42e30e6
+  ZLImageEditor: 4e340ff5eda3362087e780b9d87243e3920c099a
+
+PODFILE CHECKSUM: 4d454ea76a0678214eba73e4cf2acf228a843045
+
+COCOAPODS: 1.11.3
