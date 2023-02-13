@@ -33,7 +33,7 @@ Sensifai auto encrypt & decrypt image to upload & download image in flexible mod
 ### How to generate APK?
 1. Open the terminal and run below command in order to clone the code of Smart-gallery from Gitlab on your system:
 ```sh
-git clone https://gitlab.com/VistaAI/smart-gallery.git](https://github.com/baharisensifai/Sensifai-Smart-Gallery.git
+git clone https://github.com/baharisensifai/Sensifai-Smart-Gallery.git
 ```
 
 2. Now the source code of the app is available on your system, run below command in the terminal
