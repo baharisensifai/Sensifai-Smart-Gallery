@@ -1,0 +1,6 @@
+framework module dropbox_client {
+  umbrella header "dropbox_client-umbrella.h"
+
+  export *
+  module * { export * }
+}

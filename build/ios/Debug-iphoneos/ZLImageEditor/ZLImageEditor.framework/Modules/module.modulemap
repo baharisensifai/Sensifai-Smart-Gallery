@@ -1,0 +1,11 @@
+framework module ZLImageEditor {
+  umbrella header "ZLImageEditor-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module ZLImageEditor.Swift {
+  header "ZLImageEditor-Swift.h"
+  requires objc
+}

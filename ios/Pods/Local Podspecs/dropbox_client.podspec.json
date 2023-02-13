@@ -1,0 +1,33 @@
+{
+  "name": "dropbox_client",
+  "version": "1.0.0",
+  "summary": "Dropbox client for Flutter",
+  "description": "A new flutter plugin project.",
+  "homepage": "https://github.com/mix1009/FlutterDropbox",
+  "license": {
+    "file": "../LICENSE"
+  },
+  "authors": {
+    "Your Company": "email@example.com"
+  },
+  "source": {
+    "path": "."
+  },
+  "source_files": "Classes/**/*",
+  "public_header_files": "Classes/**/*.h",
+  "dependencies": {
+    "Flutter": [
+
+    ],
+    "ObjectiveDropboxOfficial": [
+
+    ]
+  },
+  "platforms": {
+    "ios": "9.0"
+  },
+  "pod_target_xcconfig": {
+    "DEFINES_MODULE": "YES",
+    "VALID_ARCHS[sdk=iphonesimulator*]": "x86_64"
+  }
+}

@@ -1,0 +1,6 @@
+framework module flutter_photo_editor {
+  umbrella header "flutter_photo_editor-umbrella.h"
+
+  export *
+  module * { export * }
+}

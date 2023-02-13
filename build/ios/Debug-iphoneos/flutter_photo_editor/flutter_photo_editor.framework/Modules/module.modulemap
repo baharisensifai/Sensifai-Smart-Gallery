@@ -1,0 +1,11 @@
+framework module flutter_photo_editor {
+  umbrella header "flutter_photo_editor-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module flutter_photo_editor.Swift {
+  header "flutter_photo_editor-Swift.h"
+  requires objc
+}

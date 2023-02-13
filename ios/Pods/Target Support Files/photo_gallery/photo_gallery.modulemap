@@ -1,0 +1,6 @@
+framework module photo_gallery {
+  umbrella header "photo_gallery-umbrella.h"
+
+  export *
+  module * { export * }
+}

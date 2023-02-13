@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="testRunner" value="GRADLE" />
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="modules">
+          <set>
+            <option value="$USER_HOME$/Documents/development/flutter/.pub-cache/hosted/pub.dartlang.org/connectivity_plus-3.0.2/android" />
+            <option value="$USER_HOME$/Documents/development/flutter/.pub-cache/hosted/pub.dartlang.org/device_info_plus-8.0.0/android" />
+            <option value="$USER_HOME$/Documents/development/flutter/.pub-cache/hosted/pub.dartlang.org/dropbox_client-1.0.0/android" />
+            <option value="$USER_HOME$/Documents/development/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_foreground_task-3.10.0/android" />
+            <option value="$USER_HOME$/Documents/development/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_native_splash-2.2.16/android" />
+            <option value="$USER_HOME$/Documents/development/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_photo_editor-0.0.3/android" />
+            <option value="$USER_HOME$/Documents/development/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_plugin_android_lifecycle-2.0.7/android" />
+            <option value="$USER_HOME$/Documents/development/flutter/.pub-cache/hosted/pub.dartlang.org/google_maps_flutter_android-2.4.0/android" />
+            <option value="$USER_HOME$/Documents/development/flutter/.pub-cache/hosted/pub.dartlang.org/image_vision-1.0.0/android" />
+            <option value="$USER_HOME$/Documents/development/flutter/.pub-cache/hosted/pub.dartlang.org/open_file_plus-3.3.0/android" />
+            <option value="$USER_HOME$/Documents/development/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_android-2.0.22/android" />
+            <option value="$USER_HOME$/Documents/development/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler_android-10.2.0/android" />
+            <option value="$USER_HOME$/Documents/development/flutter/.pub-cache/hosted/pub.dartlang.org/photo_gallery-1.1.1/android" />
+            <option value="$USER_HOME$/Documents/development/flutter/.pub-cache/hosted/pub.dartlang.org/share_plus-6.3.0/android" />
+            <option value="$USER_HOME$/Documents/development/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_android-2.0.14/android" />
+            <option value="$USER_HOME$/Documents/development/flutter/.pub-cache/hosted/pub.dartlang.org/sqflite-2.2.2/android" />
+            <option value="$USER_HOME$/Documents/development/flutter/.pub-cache/hosted/pub.dartlang.org/system_settings-2.1.0/android" />
+            <option value="$USER_HOME$/Documents/development/flutter/.pub-cache/hosted/pub.dartlang.org/workmanager-0.5.1/android" />
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/app" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>

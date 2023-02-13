@@ -1,0 +1,40 @@
+{
+  "name": "google_mlkit_image_labeling",
+  "version": "0.4.0",
+  "summary": "A Flutter plugin to use Google's ML Kit Image Labeling to detect and extract information about entities in an image across a broad group of categories.",
+  "description": "A Flutter plugin to use Google's ML Kit Image Labeling to detect and extract information about entities in an image across a broad group of categories.",
+  "homepage": "https://github.com/bharat-biradar/Google-Ml-Kit-plugin",
+  "license": {
+    "file": "../LICENSE"
+  },
+  "authors": "Multiple Authors",
+  "source": {
+    "path": "."
+  },
+  "source_files": "Classes/**/*",
+  "public_header_files": "Classes/**/*.h",
+  "dependencies": {
+    "Flutter": [
+
+    ],
+    "GoogleMLKit/ImageLabeling": [
+      "~> 3.1.0"
+    ],
+    "GoogleMLKit/ImageLabelingCustom": [
+      "~> 3.1.0"
+    ],
+    "google_mlkit_commons": [
+
+    ]
+  },
+  "platforms": {
+    "ios": "10.0"
+  },
+  "static_framework": true,
+  "swift_versions": "5.0",
+  "pod_target_xcconfig": {
+    "DEFINES_MODULE": "YES",
+    "EXCLUDED_ARCHS[sdk=iphonesimulator*]": "i386"
+  },
+  "swift_version": "5.0"
+}

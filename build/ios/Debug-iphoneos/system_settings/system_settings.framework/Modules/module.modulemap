@@ -1,0 +1,11 @@
+framework module system_settings {
+  umbrella header "system_settings-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module system_settings.Swift {
+  header "system_settings-Swift.h"
+  requires objc
+}

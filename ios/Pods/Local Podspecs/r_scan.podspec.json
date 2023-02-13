@@ -1,0 +1,36 @@
+{
+  "name": "r_scan",
+  "version": "0.0.1",
+  "summary": "A new Flutter project.",
+  "description": "A new Flutter project.",
+  "homepage": "http://example.com",
+  "license": {
+    "file": "../LICENSE"
+  },
+  "authors": {
+    "Your Company": "email@example.com"
+  },
+  "source": {
+    "path": "."
+  },
+  "source_files": "Classes/**/*",
+  "public_header_files": "Classes/**/*.h",
+  "dependencies": {
+    "Flutter": [
+
+    ],
+    "ATBarSDK": [
+      "~>1.4.1"
+    ],
+    "ZXingObjC": [
+      "~>3.6.5"
+    ]
+  },
+  "pod_target_xcconfig": {
+    "DEFINES_MODULE": "YES",
+    "VALID_ARCHS": "armv7 arm64 x86_64"
+  },
+  "platforms": {
+    "ios": "8.0"
+  }
+}
