@@ -31,21 +31,31 @@ class MapViewModel with ChangeNotifier, DiagnosticableTreeMixin {
 
   Future<void> getImagesWithExif(BuildContext context, StateSetter setState) async {
     _markers.clear();
-    List<Map<String, Object?>>? items = await Databases.runQuery("SELECT * FROM Labels WHERE location != '{}' AND city != '' ;");
+    List<Map<String, Object?>>? items = await Databases.runQuery("SELECT * FROM Labels WHERE location != '{}' ;");
+    // print(items);
     if (items == null) return ;
     for (int i = 0 ; i < items.length ; i++){
       Map? location;
       var id = items[i]["medium"].toString();
-      Medium medium = Medium(id: id);
+      var dl = items[i]["path"].toString().split("/");
+      var name = dl[dl.length - 1];
+      print(name);
+      Medium medium = Medium(id: id, title: name);
       var path = (await medium.getFile()).path.toString();
       try {
         location = json.decode(items[i]["location"].toString()) as Map;
         if (location.isNotEmpty){
           var lat = location["lat"];
           var lng = location["lng"];
-
+          //
           var position = LatLng(lat, lng);
-          add(context, position, setState, path, items[i]["city"].toString().capitalize(), id, medium);
+          var city = medium.title ?? name;
+          try {
+            city = items[i]["city"].toString().capitalize();
+          } on RangeError catch (e){
+            city = medium.title ?? name;
+          }
+          add(context, position, setState, path, city, id, medium);
         }
       } catch (e){
         if (kDebugMode){
@@ -109,11 +119,11 @@ class MapViewModel with ChangeNotifier, DiagnosticableTreeMixin {
                               children: [
                                 SizedBox(
                                   width: 24.w,
-                                  child: Text(name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14), overflow: TextOverflow.ellipsis, maxLines: 1)
+                                  child: Text(name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: name.contains(".") ? 12 : 14), overflow: TextOverflow.ellipsis, maxLines: 1)
                                 ),
                                 SizedBox(
                                   width: 24.w,
-                                  child: Text("${latLng.latitude},${latLng.longitude}", style: const TextStyle(fontWeight: FontWeight.w100, fontSize: 8), overflow: TextOverflow.ellipsis, maxLines: 1),
+                                  child: Text("${latLng.latitude.toStringAsFixed(3)} ,${latLng.longitude.toStringAsFixed(3)}", style: const TextStyle(fontWeight: FontWeight.w100, fontSize: 10), overflow: TextOverflow.ellipsis, maxLines: 1),
                                 ),
                               ],
                             )

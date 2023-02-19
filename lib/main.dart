@@ -4,6 +4,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:flutter_foreground_task/ui/with_foreground_task.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -14,6 +15,7 @@ import 'package:smart_gallery/utils/permissions/permission_manager.dart';
 import 'package:smart_gallery/utils/services/foregroud_service.dart';
 import 'package:smart_gallery/utils/storage/database.dart';
 import 'package:provider/provider.dart';
+import 'package:smart_gallery/utils/ui/theme/widgets/tm_text.dart';
 import 'package:smart_gallery/view/introduction/introduction.dart';
 import 'package:smart_gallery/view/navigation/navigation.dart';
 import 'package:smart_gallery/view_model/album/album.dart';
@@ -27,6 +29,7 @@ import 'package:image_vision/image_vision.dart';
 import 'package:smart_gallery/view_model/search/map/map.dart';
 import 'package:smart_gallery/view_model/search/person/person.dart';
 import 'package:smart_gallery/view_model/search/search.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:workmanager/workmanager.dart';
 
 
@@ -60,6 +63,7 @@ void callbackDispatcher() {
 }
 
 void main() async {
+
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await EasyLocalization.ensureInitialized();
@@ -72,6 +76,17 @@ void main() async {
   String? darkMode = await settings.get("darkMode", defaultValue: "system");
   if (darkMode == null){
     return ;
+  }
+
+  const platform = MethodChannel('sg.sensifai.dev/auto-start');
+  int requireGMS = 203400000;
+
+  var current = await platform.invokeMethod('getGMSVersion');
+
+  bool requireUpdateGMS = false ;
+
+  if (current < requireGMS){
+    requireUpdateGMS = true ;
   }
 
 
@@ -122,7 +137,7 @@ void main() async {
               ChangeNotifierProvider(create: (BuildContext context) => MapViewModel(context)),
               ChangeNotifierProvider(create: (BuildContext context) => PersonViewModel(context))
             ],
-            child: Application(allPermissionsIsGranted, darkMode),
+            child: Application(allPermissionsIsGranted, darkMode, requireUpdateGMS),
           )
       )
   );
@@ -133,7 +148,9 @@ void main() async {
 class Application extends StatefulWidget {
   final bool granted ;
   final String darkMode ;
-  const Application(this.granted, this.darkMode, {Key? key}) : super(key: key);
+  final bool requireUpdateGMS ;
+
+  const Application(this.granted, this.darkMode, this.requireUpdateGMS, {Key? key}) : super(key: key);
 
   @override
   State<Application> createState() => _ApplicationState();
@@ -173,7 +190,7 @@ class _ApplicationState extends State<Application> {
               localizationsDelegates: context.localizationDelegates,
               supportedLocales: context.supportedLocales,
               locale: context.locale,
-              home: !widget.granted ? const OnBoardingPage() : const Navigation(),
+              home: widget.requireUpdateGMS ? const GooglePlayUpdate() : (!widget.granted ? const OnBoardingPage() : const Navigation()),
               themeMode: widget.darkMode == "system" ? ThemeMode.system : (widget.darkMode == "dark" ? ThemeMode.dark : ThemeMode.light),
             );
           }
@@ -181,3 +198,46 @@ class _ApplicationState extends State<Application> {
     );
   }
 }
+
+class GooglePlayUpdate extends StatelessWidget {
+  const GooglePlayUpdate({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        width: double.infinity,
+        padding: EdgeInsets.only(top: 15.h),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Image.asset("assets/images/png/gpms.png", width: 100, height: 100),
+            const SizedBox(height: 24),
+            const TMText("Google play services", fontWeight: FontWeight.bold, fontSize: 24, letterSpacing: 1.2,),
+            const Padding(
+              padding: EdgeInsets.all(16),
+              child: TMText("Your Google Play Services is out of date. please update your Google Play Services, then close and reopen app to work it's perfectly. Good Luck.", fontWeight: FontWeight.w400, fontSize: 16, letterSpacing: 1.2, height: 1.5,),
+            ),
+            const SizedBox(height: 0),
+            Container(
+              width: double.infinity,
+              height: 45,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: ElevatedButton(
+                  onPressed: () async {
+                    const googlePlayServiceURL = "https://play.google.com/store/apps/details?id=com.google.android.gms&hl=en&gl=US&pli=1";
+                    if (await canLaunchUrl(Uri.parse(googlePlayServiceURL))) {
+                      await launchUrl(Uri.parse(googlePlayServiceURL), mode: LaunchMode.externalApplication);
+                    }
+                  },
+                  child: const Text("UPDATE Google Play Services", style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1.5))
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+

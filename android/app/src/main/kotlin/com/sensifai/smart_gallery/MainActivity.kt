@@ -5,11 +5,14 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.provider.Settings
+import androidx.core.content.pm.PackageInfoCompat
 import androidx.multidex.MultiDex
+import com.google.android.gms.common.GoogleApiAvailability
 import com.judemanutd.autostarter.AutoStartPermissionHelper
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
+
 
 class MainActivity: FlutterActivity() {
 
@@ -41,6 +44,14 @@ class MainActivity: FlutterActivity() {
                     }
                 }
                 result.success("true")
+            } else if (call.method == "getGMSVersion"){
+                val v: Long = PackageInfoCompat.getLongVersionCode(
+                    packageManager.getPackageInfo(
+                        GoogleApiAvailability.GOOGLE_PLAY_SERVICES_PACKAGE,
+                        0
+                    )
+                )
+                result.success(v)
             } else {
                 result.notImplemented()
             }

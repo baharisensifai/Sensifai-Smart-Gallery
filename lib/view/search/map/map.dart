@@ -53,7 +53,7 @@ class MapSampleState extends State<MapScreen> {
               context.read<MapViewModel>().customInfoWindowController.googleMapController = controller;
             },
             mapToolbarEnabled: true,
-            mapType: MapType.hybrid,
+            mapType: MapType.normal,
             markers: context.read<MapViewModel>().markers,
             initialCameraPosition: CameraPosition(
               target: context.read<MapViewModel>().latLng,

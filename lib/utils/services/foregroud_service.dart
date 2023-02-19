@@ -8,6 +8,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:exif/exif.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:image_vision/image_vision.dart';
 import 'package:path_provider/path_provider.dart';
@@ -226,12 +227,12 @@ class ForegroundTask {
 
   static Future<void> startTaggingImages(List<Medium> mediums, {int index = 0}) async {
     if (index == mediums.length) {
-      addCityToImages();
+      detectFaces();
       return ;
     }
     int count = await Databases.getCountFromTable("Labels", mainThread: index == 0 ? false : true);
     if (count == mediums.length){
-      addCityToImages();
+      detectFaces();
       return ;
     }
     Medium medium = mediums[index];
@@ -301,7 +302,7 @@ class ForegroundTask {
       String cityName = "";
 
       // try {
-      //   cityName = await convertLatLngToCityName(latlng, true) ?? "" ;
+      //   cityName = await convertLatLngToCityName(latlng) ?? "" ;
       // } catch (e){
       //   if (kDebugMode){
       //     print(e);
@@ -374,10 +375,10 @@ class ForegroundTask {
       // }
 
       try {
-        await Databases.modify("INSERT INTO Labels ( name, path, labels, medium, location, city, faces, faces_details, recognised ) VALUES ( '${medium.filename}', '${file.path}', '${json.encode(tags)}', '${medium.id}', '${json.encode(latlng)}', '$cityName', '${json.encode(personsInImage)}', '', false);", mainThread: true);
+        await Databases.modify("INSERT INTO Labels ( name, path, labels, medium, location, city, faces, faces_details, recognised ) VALUES ( '${medium.title}', '${file.path}', '${json.encode(tags)}', '${medium.id}', '${json.encode(latlng)}', '$cityName', '${json.encode(personsInImage)}', '', 'false');", mainThread: true);
       } catch (e){
         if (kDebugMode){
-          print(e);
+          print("L380 - $e");
         }
       }
 
@@ -392,9 +393,9 @@ class ForegroundTask {
       }
     } catch (e){
       if (kDebugMode) {
-        print(e);
+        print("L395 - $e");
       }
-      await Databases.modify("INSERT INTO Labels ( name, path, labels, medium, faces_details, recognised ) VALUES ( '${medium.filename}', '${(await medium.getFile()).path}', '${json.encode([])}', '${medium.id}', '', false);", mainThread: true);
+      await Databases.modify("INSERT INTO Labels ( name, path, labels, medium, faces_details, recognised ) VALUES ( '${medium.title}', '${(await medium.getFile()).path}', '${json.encode([])}', '${medium.id}', '', 'false');", mainThread: true);
       int andis = index + 1 ;
       FlutterForegroundTask.updateService(
         notificationTitle: 'Working on $andis / ${mediums.length}',
@@ -419,7 +420,7 @@ class ForegroundTask {
       callback: null,
     );
 
-    bool connectionIsWifi = true ;
+    bool connectionIsWifi = false ;
 
     final Connectivity connectivity = Connectivity();
     connectivity.onConnectivityChanged.listen((ConnectivityResult event){
@@ -430,11 +431,11 @@ class ForegroundTask {
     if (!connectionIsWifi){
       FlutterForegroundTask.updateService(
         notificationTitle: 'Wifi not connected',
-        notificationText: 'Skipping from locations ...',
+        notificationText: 'Skipping from locations analyzer ...',
         callback: null,
       );
       Future.delayed(const Duration(milliseconds: 1000), () async {
-        detectFaces();
+        await detectFaces();
       });
       return;
     }
@@ -459,11 +460,20 @@ class ForegroundTask {
           callback: null,
         );
         Map<String, Object?> label = labels[i];
-        Map<String, double> latlng = json.decode(label["location"].toString());
-        String? city = await convertLatLngToCityName(latlng, connectionIsWifi);
-        if (city != null){
-          String query = "UPDATE Labels SET city = '$city' WHERE id = ${label["id"].toString()};";
-          await Databases.modify(query);
+        Map<String, dynamic> latlng = json.decode(label["location"].toString());
+        if (connectionIsWifi){
+          String? city ;
+          try {
+            city = await convertLatLngToCityName(latlng);
+          } catch (e){
+            if (kDebugMode){
+              print("ACTIF EX: $e");
+            }
+          }
+          if (city != null){
+            String query = "UPDATE Labels SET city = '$city' WHERE id = ${label["id"].toString()};";
+            await Databases.modify(query);
+          }
         }
         if (i == (labels.length - 1)){
           detectFaces();
@@ -481,37 +491,32 @@ class ForegroundTask {
   }
 
 
-  static Future<String?> convertLatLngToCityName(Map<String, double> latlng, bool connectionIsWifi) async {
+  static Future<String?> convertLatLngToCityName(Map<String, dynamic> latlng) async {
     double? lat = latlng["lat"];
     double? lng = latlng["lng"];
     if (lat == null || lng == null) return null ;
-    if (!connectionIsWifi) return null;
     String cityName = "";
     try {
       http.Response response = await http.get(Uri.parse("https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat.toString()}&lon=${lng.toString()}&accept-language=en"));
       String city = json.decode(response.body)["address"]["state"] != null ? json.decode(response.body)["address"]["state"].toString().replaceAll(" Province", "").toLowerCase() : json.decode(response.body)["address"]["province"].toString().replaceAll(" Province", "").toLowerCase() ;
       cityName = city ;
-      if (kDebugMode){
-        print(city);
-      }
     } catch (e){
       if (kDebugMode){
-        print(e);
+        print("CLLTCN EX: $e");
       }
       return null ;
     }
-    return cityName == "" ? null : cityName ;
+    return cityName == "" || cityName == "Null" ? null : cityName ;
   }
 
   static Future<void> detectFaces() async {
-    await ImageVision.initial();
     FlutterForegroundTask.updateService(
       notificationTitle: 'Working on faces',
       notificationText: 'Finding faces in images',
       callback: null,
     );
 
-    List<Map<String, Object?>>? labels = await Databases.runQuery("SELECT * FROM Labels WHERE faces_details = '';", mainThread: false);
+    List<Map<String, Object?>>? labels = await Databases.runQuery("SELECT * FROM Labels WHERE faces_details = '';", mainThread: true);
     if (labels == null) return ;
     if (labels.isEmpty){
       FlutterForegroundTask.updateService(
@@ -519,13 +524,14 @@ class ForegroundTask {
         notificationText: 'Going to faces recognition',
         callback: null,
       );
-      Future.delayed(const Duration(milliseconds: 1000), (){
-        recogniseFaces();
+      Future.delayed(const Duration(milliseconds: 1000), () async {
+        await recogniseFaces();
       });
 
       return ;
     }
     for (int i = 0 ; i < labels.length ; i++){
+      await Future.delayed(const Duration(milliseconds: 2500));
       FlutterForegroundTask.updateService(
         notificationTitle: 'Searching for faces',
         notificationText: 'Image ${i + 1} / ${labels.length}',
@@ -536,23 +542,37 @@ class ForegroundTask {
       Uint8List bytes = await file.readAsBytes();
       img.Image? image = img.decodeImage(bytes);
       if (image == null) return ;
-      String jsonFaces = await ImageVision.detectFacesFromImage(bytes);
-      await Databases.modify("UPDATE Labels SET faces_details = '$jsonFaces' WHERE id = ${label["id"].toString()};");
+      String? jsonFaces;
+      try {
+        jsonFaces = await ImageVision.detectFacesFromImage(bytes);
+      } catch (e){
+        if (kDebugMode) {
+          print("EODF: $e");
+        }
+      }
+      if (jsonFaces != null){
+        await Databases.modify("UPDATE Labels SET faces_details = '$jsonFaces' WHERE id = ${label["id"].toString()};");
+      }
+      if ( i == (labels.length - 1)){
+        FlutterForegroundTask.updateService(
+          notificationTitle: 'Face recognition',
+          notificationText: 'Initialing images',
+          callback: null,
+        );
+        Future.delayed(const Duration(milliseconds: 1000), () async {
+          await recogniseFaces();
+        });
+      }
     }
-    FlutterForegroundTask.updateService(
-      notificationTitle: 'Face recognition',
-      notificationText: 'Initialing images',
-      callback: null,
-    );
-    Future.delayed(const Duration(milliseconds: 1000), (){
-      recogniseFaces();
-    });
   }
 
   static Future<void> recogniseFaces () async {
-    await ImageVision.initial();
-    List<Map<String, Object?>>? labels = await Databases.runQuery("SELECT * FROM Labels WHERE faces_details != '' AND recognised != true;", mainThread: false);
+    List<Map<String, Object?>>? labels = await Databases.runQuery("SELECT * FROM Labels WHERE faces_details != '' AND recognised != 'true';", mainThread: true);
     if (labels == null) return ;
+    if (labels.isEmpty){
+      ForegroundTask().stopForegroundService();
+      return;
+    }
     var directory = await getExternalStorageDirectory();
     var path = "${directory?.path}";
     List<int> personsInImage = [];
@@ -641,7 +661,7 @@ class ForegroundTask {
           }
         }
       }
-      await Databases.modify("UPDATE Labels SET faces = '${json.encode(personsInImage)}', recognised = true WHERE id = ${label["id"].toString()}");
+      await Databases.modify("UPDATE Labels SET faces = '${json.encode(personsInImage)}', recognised = 'true' WHERE id = ${label["id"].toString()}");
       if (i == (labels.length - 1)){
         await FlutterForegroundTask.stopService();
       }
@@ -672,20 +692,20 @@ class AddImagesTaskHandler extends TaskHandler {
   Future<void> onEvent(DateTime timestamp, SendPort? sendPort) async {
     if (!isBusy){
       List<Medium> mediums = [];
-      if (data == "null"){
-        await FlutterForegroundTask.stopService();
-        return;
-      }
-      try {
-        var vars = json.decode(data ?? "[]") as List;
-        for (int i = 0 ; i < vars.length ; i++){
-          mediums.add(Medium(id: vars[i].toString()));
+      if (data != "null" && data != null){
+        try {
+          var vars = json.decode(data ?? "[]") as List;
+          if (vars != []){
+            for (int i = 0 ; i < vars.length ; i++){
+              mediums.add(Medium(id: vars[i].toString()));
+            }
+            ForegroundTask.startTaggingImages(mediums);
+          }
+        } catch (e) {
+          dev.log("Starting images error: ${e.toString()}");
         }
-        ForegroundTask.startTaggingImages(mediums);
-      } catch (e) {
-        dev.log("Starting images error: ${e.toString()}");
+        isBusy = true ;
       }
-      isBusy = true ;
     }
   }
 

@@ -73,6 +73,7 @@ flutter {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.github.judemanutd:autostarter:1.1.0'
+    implementation 'com.google.android.gms:play-services-base:18.1.0'
     def multidex_version = "2.0.1"
     implementation "androidx.multidex:multidex:$multidex_version"
 }

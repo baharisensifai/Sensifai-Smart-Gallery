@@ -62,7 +62,7 @@
         android:name="androidx.multidex.MultiDexApplication"
         android:label="Smart Gallery"
         android:icon="@mipmap/ic_launcher"
-        android:largeHeap="true"
+        android:largeHeap="false"
         android:requestLegacyExternalStorage="true"
         >
 
