@@ -220,9 +220,20 @@ class ForegroundTask {
   /// only call [startTaggingImages] method when all albums on devices added
   /// to app database
   /// only with calling
+  ///
+  /// .
+  ///
+  /// .
+  /// ___
   /// ```dart
-  /// addImages();
+  /// // start tagging images
+  /// startTaggingImages(List<Medium> mediums, {int index = 0})
   /// ```
+  /// ___
+  /// .
+  ///
+  /// .
+  ///
   /// you can pass
 
   static Future<void> startTaggingImages(List<Medium> mediums, {int index = 0}) async {
@@ -242,14 +253,22 @@ class ForegroundTask {
     if (labels.isNotEmpty){
       int andis = index + 1 ;
       FlutterForegroundTask.updateService(
-        notificationTitle: 'Working on $andis / ${mediums.length}',
-        notificationText: '$index images added',
+        notificationTitle: 'Checking labels',
+        notificationText: 'Please wait ...',
         callback: null,
       );
       if (andis <= mediums.length){
         startTaggingImages(mediums, index: andis);
       }
       return ;
+    }
+
+    if (labels.isEmpty) {
+      FlutterForegroundTask.updateService(
+        notificationTitle: 'Working on ${index + 1} / ${mediums.length}',
+        notificationText: '$index images added',
+        callback: null,
+      );
     }
 
     if (kDebugMode) {
@@ -300,79 +319,6 @@ class ForegroundTask {
       }
 
       String cityName = "";
-
-      // try {
-      //   cityName = await convertLatLngToCityName(latlng) ?? "" ;
-      // } catch (e){
-      //   if (kDebugMode){
-      //     print(e);
-      //   }
-      // }
-
-      // try {
-      //   List<Map<String, dynamic>> faces = await findFaces(file);
-      //   for (int i = 0 ; i < faces.length ; i++){
-      //     Map<String, dynamic> face = faces[i];
-      //     if (image == null) return ;
-      //     var faceCrop = img.copyCrop(
-      //         image,
-      //         int.parse(face["left"].toString()),
-      //         int.parse(face["top"].toString()),
-      //         int.parse(face["width"].toString()),
-      //         int.parse(face["height"].toString())
-      //     );
-      //     final png = img.encodePng(faceCrop);
-      //     var recognise = await recognizeFace(png);
-      //     if (kDebugMode) {
-      //       print(recognise);
-      //     }
-      //     if (recognise["title"] == "face_not_found"){
-      //       if (face["right_eye_open_probability"] >= 0.9 && face["left_eye_open_probability"] >= 0.9 && face["smiling_probability"] >= 0.005) {
-      //         int? id = await Databases.modify("INSERT INTO Faces ( name, faces, face ) VALUES( '',	'', '' );") ;
-      //         if (id == null) return;
-      //         if (!personsInImage.contains(id)){
-      //           personsInImage.add(id);
-      //         }
-      //         Directory faceIdDirectory = Directory("$path/$id");
-      //         if (!faceIdDirectory.existsSync()){
-      //           faceIdDirectory.createSync();
-      //         }
-      //         var file = File("${faceIdDirectory.path}/${DateTime.now().millisecondsSinceEpoch}.png");
-      //         await file.writeAsBytes(png);
-      //         await Databases.modify("UPDATE Faces SET faces = '${faceIdDirectory.path}', face = '${file.path}' WHERE id = $id");
-      //         await register(id.toString(), png);
-      //       }
-      //     } else if (recognise["title"] != "face_registered" && recognise["title"] != "face_detector_is_null"){
-      //       if (recognise["distance"] < 1.0){
-      //         var id = recognise["title"].toString() ;
-      //         var person = int.parse(id);
-      //         if (!personsInImage.contains(person)){
-      //           personsInImage.add(person);
-      //         }
-      //       } else {
-      //         if (face["right_eye_open_probability"] >= 0.9 && face["left_eye_open_probability"] >= 0.9 && face["smiling_probability"] >= 0.005) {
-      //           int? id = await Databases.modify("INSERT INTO Faces ( name, faces, face ) VALUES( '',	'', '' );") ;
-      //           if (id == null) return;
-      //           if (!personsInImage.contains(id)){
-      //             personsInImage.add(id);
-      //           }
-      //           Directory faceIdDirectory = Directory("$path/$id");
-      //           if (!faceIdDirectory.existsSync()){
-      //             faceIdDirectory.createSync();
-      //           }
-      //           var file = File("${faceIdDirectory.path}/${DateTime.now().millisecondsSinceEpoch}.png");
-      //           await file.writeAsBytes(png);
-      //           await Databases.modify("UPDATE Faces SET faces = '${faceIdDirectory.path}', face = '${file.path}' WHERE id = $id");
-      //           await register(id.toString(), png);
-      //         }
-      //       }
-      //     }
-      //   }
-      // } catch (e){
-      //   if (kDebugMode){
-      //     print(e);
-      //   }
-      // }
 
       try {
         await Databases.modify("INSERT INTO Labels ( name, path, labels, medium, location, city, faces, faces_details, recognised ) VALUES ( '${medium.title}', '${file.path}', '${json.encode(tags)}', '${medium.id}', '${json.encode(latlng)}', '$cityName', '${json.encode(personsInImage)}', '', 'false');", mainThread: true);

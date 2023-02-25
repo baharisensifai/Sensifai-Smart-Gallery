@@ -6,7 +6,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
-import 'package:flutter_foreground_task/ui/with_foreground_task.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -29,7 +28,6 @@ import 'package:image_vision/image_vision.dart';
 import 'package:smart_gallery/view_model/search/map/map.dart';
 import 'package:smart_gallery/view_model/search/person/person.dart';
 import 'package:smart_gallery/view_model/search/search.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:workmanager/workmanager.dart';
 
 
@@ -78,7 +76,7 @@ void main() async {
     return ;
   }
 
-  const platform = MethodChannel('sg.sensifai.dev/auto-start');
+  const platform = MethodChannel('sg.sensifai.dev/sg');
   int requireGMS = 203400000;
 
   var current = await platform.invokeMethod('getGMSVersion');
@@ -202,6 +200,8 @@ class _ApplicationState extends State<Application> {
 class GooglePlayUpdate extends StatelessWidget {
   const GooglePlayUpdate({Key? key}) : super(key: key);
 
+  static const platform = MethodChannel('sg.sensifai.dev/sg');
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -227,9 +227,9 @@ class GooglePlayUpdate extends StatelessWidget {
               child: ElevatedButton(
                   onPressed: () async {
                     const googlePlayServiceURL = "https://play.google.com/store/apps/details?id=com.google.android.gms&hl=en&gl=US&pli=1";
-                    if (await canLaunchUrl(Uri.parse(googlePlayServiceURL))) {
-                      await launchUrl(Uri.parse(googlePlayServiceURL), mode: LaunchMode.externalApplication);
-                    }
+                    platform.invokeMethod("open", {
+                      "url": googlePlayServiceURL
+                    });
                   },
                   child: const Text("UPDATE Google Play Services", style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1.5))
               ),
