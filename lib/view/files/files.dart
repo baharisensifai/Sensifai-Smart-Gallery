@@ -44,7 +44,7 @@ class _FileManagerState extends State<FileManager> with WidgetsBindingObserver {
     switch (state){
       case AppLifecycleState.resumed: {
         Future.delayed(const Duration(milliseconds: 250), (){
-          context.read<FilesViewModel>().loginToDropbox();
+          context.read<FilesViewModel>().loadDirectory(context);
         });
         break;
       }
@@ -250,108 +250,6 @@ class _FileManagerState extends State<FileManager> with WidgetsBindingObserver {
                             },
                           )
                       );
-                      // var snackBar = SnackBar(
-                      //   content: const Text('Do you want to download ?'),
-                      //   action: SnackBarAction(
-                      //     label: 'Download',
-                      //     onPressed: () async {
-                      //       var path = context.read<FilesViewModel>().result![index - 1]["pathDisplay"];
-                      //       var name = context.read<FilesViewModel>().result![index - 1]["name"].toString();
-                      //       if (path.toString().endsWith("aes")){
-                      //         Directory? directory = (await getExternalStorageDirectory());
-                      //         if (directory == null) return ;
-                      //         var downloadPath = "${directory.path}/Smart-Gallery/";
-                      //         var downloadDirectory = Directory(downloadPath);
-                      //         if (!(await downloadDirectory.exists())){
-                      //           downloadDirectory.create();
-                      //         }
-                      //         var downloadPercent = 0.0 ;
-                      //         try {
-                      //           ProgressDialog pd = ProgressDialog(context: context);
-                      //           pd.show(max: 100, msg: "File Downloading");
-                      //           final result = await Dropbox.download(path, downloadPath, (downloaded, total) async {
-                      //             downloadPercent = ((downloaded * 100) / total);
-                      //             pd.update(value: downloadPercent.toInt() ~/ 100);
-                      //             if (downloaded == total){
-                      //               var encFile = File(downloadPath);
-                      //               var path = encFile.path;
-                      //               var sd = path.split("/");
-                      //               var filename = sd[sd.length - 1];
-                      //               var fn = filename.replaceAll(".aes", "");
-                      //               filename = fn;
-                      //               path = path.replaceAll(sd[sd.length - 1], filename);
-                      //               print(path);
-                      //               print(encFile.path);
-                      //
-                      //
-                      //               LazyBox<String> paths = Hive.isBoxOpen("paths") ? Hive.lazyBox("paths") : await Hive.openLazyBox("paths");
-                      //               for (int i = 0 ; i < paths.length ; i++){
-                      //                 var path = await paths.getAt(i);
-                      //                 if (path == downloadPath){
-                      //                   await paths.deleteAt(i);
-                      //                 }
-                      //               }
-                      //               await paths.add(downloadPath);
-                      //
-                      //               // var encStr = await encFile.readAsString();
-                      //               // var key = 'EncryptKey0021';
-                      //               // var encrypted = encStr;
-                      //               // var bytes = List<int>.from(json.decode(encrypted));
-                      //               // await encFile.writeAsBytes(bytes);
-                      //               // pd.close();
-                      //               // downloadPercent = 0.0;
-                      //               // LazyBox<String> paths = Hive.isBoxOpen("paths") ? Hive.lazyBox("paths") : await Hive.openLazyBox("paths");
-                      //               // for (int i = 0 ; i < paths.length ; i++){
-                      //               //   var path = await paths.getAt(i);
-                      //               //   if (path == downloadPath){
-                      //               //     await paths.deleteAt(i);
-                      //               //   }
-                      //               // }
-                      //               // await paths.add(downloadPath);
-                      //               // Alert alert = Alert(context);
-                      //               // alert.success("File downloaded", "Click here to view $downloadPath", onTap: (){
-                      //               //   OpenFile.open(downloadPath);
-                      //               // }, timeInMS: 5000);
-                      //             }
-                      //           });
-                      //         } catch (e){
-                      //           downloadPercent = 0.0 ;
-                      //         }
-                      //       } else {
-                      //         Directory? directory = await getExternalStorageDirectory();
-                      //         if (directory == null) return ;
-                      //         var downloadPath = "${directory.path}/$name";
-                      //         var downloadPercent = 0.0 ;
-                      //         try {
-                      //           ProgressDialog pd = ProgressDialog(context: context);
-                      //           pd.show(max: 100, msg: "File Downloading");
-                      //           final result = await Dropbox.download(path, downloadPath, (downloaded, total) async {
-                      //             downloadPercent = ((downloaded * 100) / total);
-                      //             pd.update(value: downloadPercent.toInt() ~/ 100);
-                      //             if (downloaded == total){
-                      //               pd.close();
-                      //               downloadPercent = 0.0;
-                      //               LazyBox<String> paths = Hive.isBoxOpen("paths") ? Hive.lazyBox("paths") : await Hive.openLazyBox("paths");
-                      //               for (int i = 0 ; i < paths.length ; i++){
-                      //                 var path = await paths.getAt(i);
-                      //                 if (path == downloadPath){
-                      //                   await paths.deleteAt(i);
-                      //                 }
-                      //               }
-                      //               await paths.add(downloadPath);
-                      //               Alert alert = Alert(context);
-                      //               alert.success("File downloaded", "Click here to view $downloadPath", onTap: (){
-                      //                 OpenFile.open(downloadPath);
-                      //               }, timeInMS: 5000);
-                      //             }
-                      //           });
-                      //         } catch (e){
-                      //           downloadPercent = 0.0 ;
-                      //         }
-                      //       }
-                      //     },
-                      //   ),
-                      // );
                       ScaffoldMessenger.of(context).showSnackBar(sb);
                     } else {
                       context.read<FilesViewModel>().loadDirectory(context, path: (context.read<FilesViewModel>().result![index - 1]["pathDisplay"]).toString());

@@ -26,7 +26,9 @@ class FilesViewModel with ChangeNotifier, DiagnosticableTreeMixin {
     ).then((value) {
       notifyListeners();
     }). catchError((e){
-      print("EEEEEE - $e");
+      if (kDebugMode) {
+        print("EEEEEE - $e");
+      }
     });
   }
 
@@ -39,23 +41,30 @@ class FilesViewModel with ChangeNotifier, DiagnosticableTreeMixin {
     await Dropbox.init("reg11w404ra1uh0", "reg11w404ra1uh0", "2ifyyj5siyv3qtf");
     String? token;
     token = await accounts.get("dropbox", defaultValue: null);
+    await Dropbox.getAccessToken();
     token ??= await Dropbox.getAccessToken();
     try {
       if (token != null){
-        await accounts.put("dropbox", token);
+        // await accounts.put("dropbox", token);
         await Dropbox.authorizeWithAccessToken(token);
-        final url = await Dropbox.getTemporaryLink('/');
+        // if (link == null ) {
+        //
+        // }
+        final url = await Dropbox.getTemporaryLink('/storage');
         if (url == null) return ;
-        if (url.contains("expired_access_token")){
+        if (url.toString().contains("expired_access_token") || url == "error = (null)"){
           check = false ;
           loggedIn = false ;
           initialing = false ;
-          await accounts.delete("dropbox");
+          if (accounts.containsKey("dropbox")){
+            await accounts.delete("dropbox");
+          }
           notifyListeners();
         } else {
           check = false ;
           loggedIn = true ;
           initialing = false ;
+          await accounts.put("dropbox", token);
           load();
         }
       } else {
@@ -69,7 +78,7 @@ class FilesViewModel with ChangeNotifier, DiagnosticableTreeMixin {
         notifyListeners();
       }
     } catch (e){
-      print("EEEEEE - $e");
+      print("EEEEEE2 - $e");
       // if (kDebugMode){
       //   print(e);
       // }
@@ -122,7 +131,7 @@ class FilesViewModel with ChangeNotifier, DiagnosticableTreeMixin {
       // }
       notifyListeners();
     } catch (e){
-      print("EEEEEE - $e");
+      print("EEEEEE3 - $e");
       await accounts.delete("dropbox");
       loggedIn = false ;
       loaded = true ;

@@ -12,6 +12,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_photo_editor/flutter_photo_editor.dart';
 import 'package:hive/hive.dart';
+import 'package:image_vision/image_vision.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:photo_gallery/photo_gallery.dart';
 import 'package:share_plus/share_plus.dart';
@@ -105,6 +106,7 @@ class ImageViewModel with ChangeNotifier, DiagnosticableTreeMixin {
 
   void showLabels(BuildContext context, Medium medium, File file) async {
     String value = "";
+
     List<Map<String, Object?>>? labels = await Databases.runQuery("SELECT * FROM Labels WHERE medium = '${medium.id}' ;");
     if (labels == null) return ;
     TextEditingController controller = TextEditingController();

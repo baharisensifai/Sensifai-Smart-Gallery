@@ -50,7 +50,6 @@ class _PersonScreenState extends State<PersonScreen> {
                     },
                   ),
                 );
-
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
               },
               icon: const Icon(Icons.delete_sweep_outlined)
@@ -67,7 +66,7 @@ class _PersonScreenState extends State<PersonScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children:  [
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
+              padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -79,7 +78,7 @@ class _PersonScreenState extends State<PersonScreen> {
                       foregroundImage: FileImage(File("${context.watch<PersonViewModel>().details!["face"]}")),
                     ),
                   ),
-                  const SizedBox(width: 16),
+                  const SizedBox(width: 4),
                   TextButton(
                     onPressed: (){
                       context.read<PersonViewModel>().showChangeNameDialog(context);
@@ -93,7 +92,6 @@ class _PersonScreenState extends State<PersonScreen> {
                 ],
               ),
             ),
-
             Container(
               height: 72.h,
               padding: const EdgeInsets.only(top: 8, right: 8, left: 8),

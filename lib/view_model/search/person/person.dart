@@ -47,6 +47,7 @@ class PersonViewModel with ChangeNotifier, DiagnosticableTreeMixin {
         context: context,
         isScrollControlled: true,
         enableDrag: true,
+        backgroundColor: Theme.of(context).backgroundColor,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(16),
@@ -56,6 +57,13 @@ class PersonViewModel with ChangeNotifier, DiagnosticableTreeMixin {
         builder: (builder){
           return Container(
             padding: EdgeInsets.only(top: 24, left: 24, right: 24, bottom: 24 + MediaQuery.of(context).viewInsets.bottom),
+            decoration: BoxDecoration(
+                color: Theme.of(context).backgroundColor,
+                borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(16),
+                    topRight: Radius.circular(16)
+                )
+            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,

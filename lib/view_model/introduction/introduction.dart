@@ -67,6 +67,10 @@ class OnBoardingViewModel with ChangeNotifier, DiagnosticableTreeMixin {
 
   Future<void> checkNotificationPermission (BuildContext context) async {
     var notificationPermissionIsGranted = await access.Permission.notification.isGranted;
+    if (Platform.isIOS){
+      onIntroEnd(context);
+      return;
+    }
     if (notificationPermissionIsGranted) {
       onIntroEnd(context);
     } else {

@@ -580,7 +580,7 @@ class ForegroundTask {
           await Databases.modify("UPDATE Faces SET faces = '${faceIdDirectory.path}', face = '${file.path}' WHERE id = $id");
           await register(id.toString(), png);
         } else {
-          if (double.parse(response["distance"].toString()) < 0.5){
+          if (double.parse(response["distance"].toString()) < 1.0){
             if (double.parse(response['distance'].toString()) < minResponse){
               minResponse = double.parse(response['distance'].toString());
             }

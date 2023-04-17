@@ -33,6 +33,7 @@ import 'package:workmanager/workmanager.dart';
 
 @pragma('vm:entry-point') // Mandatory if the App is obfuscated or using Flutter 3.1+
 void callbackDispatcher() {
+  if (!Platform.isAndroid) return ;
   Workmanager().executeTask((task, inputData) async {
     try {
       bool initialed = await ImageVision.initial();
@@ -67,7 +68,9 @@ void main() async {
   await EasyLocalization.ensureInitialized();
   await Hive.initFlutter();
   await Databases.initialDatabases();
-  await ImageVision.initial();
+  if (Platform.isAndroid){
+    await ImageVision.initial();
+  }
 
   String box = "settings" ;
   LazyBox<String> settings = Hive.isBoxOpen(box) ? Hive.lazyBox(box) : await Hive.openLazyBox(box);
@@ -76,15 +79,19 @@ void main() async {
     return ;
   }
 
-  const platform = MethodChannel('sg.sensifai.dev/sg');
-  int requireGMS = 203400000;
 
-  var current = await platform.invokeMethod('getGMSVersion');
 
   bool requireUpdateGMS = false ;
 
-  if (current < requireGMS){
-    requireUpdateGMS = true ;
+  if (Platform.isAndroid){
+    const platform = MethodChannel('sg.sensifai.dev/sg');
+    int requireGMS = 203400000;
+
+    var current = await platform.invokeMethod('getGMSVersion');
+
+    if (current < requireGMS){
+      requireUpdateGMS = true ;
+    }
   }
 
 
@@ -106,7 +113,7 @@ void main() async {
   bool isGrantedPhotosPermission = await PermissionManager.isGranted(Platform.isAndroid ? ((android?.version.sdkInt ?? 0) >= 33 ? Permission.photos : Permission.storage) : Permission.photos);
   bool canDrawOverlays = await FlutterForegroundTask.canDrawOverlays ;
   bool isIgnoringBatteryOptimizations = await FlutterForegroundTask.isIgnoringBatteryOptimizations;
-  bool isGrantedNotificationsPermission = await PermissionManager.isGranted(Permission.notification);
+  bool isGrantedNotificationsPermission = Platform.isAndroid ? await PermissionManager.isGranted(Permission.notification) : true;
   bool allPermissionsIsGranted = isGrantedPhotosPermission && canDrawOverlays && isIgnoringBatteryOptimizations && isGrantedNotificationsPermission;
   runApp(
       // Initial for multi language support with [EasyLocalization] dependency

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -45,44 +47,48 @@ class NavigationState extends State<Navigation> with WidgetsBindingObserver {
 
   @override
   void dispose() {
-    context.read<NavigationViewModel>().controller.dispose();
-    WidgetsBinding.instance.removeObserver(this);
-    Workmanager().initialize(
-        callbackDispatcher, // The top level function, aka callbackDispatcher
-        isInDebugMode: false // If enabled it will post a notification whenever the task is running. Handy for debugging tasks
-    );
+    if (Platform.isAndroid){
+      context.read<NavigationViewModel>().controller.dispose();
+      WidgetsBinding.instance.removeObserver(this);
+      Workmanager().initialize(
+          callbackDispatcher, // The top level function, aka callbackDispatcher
+          isInDebugMode: false // If enabled it will post a notification whenever the task is running. Handy for debugging tasks
+      );
 
-    Workmanager().registerPeriodicTask("tagging", "Processing images", frequency: const Duration(minutes: 15));
+      Workmanager().registerPeriodicTask("tagging", "Processing images", frequency: const Duration(minutes: 15));
+    }
     super.dispose();
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (kDebugMode){
-      print(state.name);
-    }
-    switch (state){
-      case AppLifecycleState.resumed: {
-        Workmanager().cancelByUniqueName("tagging");
-        ft.stopForegroundService();
-        break;
+    if (Platform.isAndroid){
+      if (kDebugMode){
+        print(state.name);
       }
-      case AppLifecycleState.inactive: {
-        Workmanager().initialize(
-            callbackDispatcher, // The top level function, aka callbackDispatcher
-            isInDebugMode: false // If enabled it will post a notification whenever the task is running. Handy for debugging tasks
-        );
+      switch (state){
+        case AppLifecycleState.resumed: {
+          Workmanager().cancelByUniqueName("tagging");
+          ft.stopForegroundService();
+          break;
+        }
+        case AppLifecycleState.inactive: {
+          Workmanager().initialize(
+              callbackDispatcher, // The top level function, aka callbackDispatcher
+              isInDebugMode: false // If enabled it will post a notification whenever the task is running. Handy for debugging tasks
+          );
 
-        Workmanager().registerPeriodicTask("tagging", "Processing images", frequency: const Duration(minutes: 15));
-        // ft.startForegroundService();
-        break;
+          Workmanager().registerPeriodicTask("tagging", "Processing images", frequency: const Duration(minutes: 15));
+          // ft.startForegroundService();
+          break;
+        }
+        case AppLifecycleState.paused:
+        // TODO: Handle this case.
+          break;
+        case AppLifecycleState.detached:
+        // TODO: Handle this case.
+          break;
       }
-      case AppLifecycleState.paused:
-        // TODO: Handle this case.
-        break;
-      case AppLifecycleState.detached:
-        // TODO: Handle this case.
-        break;
     }
     super.didChangeAppLifecycleState(state);
   }

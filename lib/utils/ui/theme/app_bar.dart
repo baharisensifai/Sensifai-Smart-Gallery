@@ -6,7 +6,7 @@ AppBar getAppBar (BuildContext context, {Widget? title, Widget? leading, List<Wi
   bool isDarkMode = brightness == Brightness.dark;
   return AppBar(
     backgroundColor: Theme.of(context).backgroundColor,
-    title: title ?? Image.asset(isDarkMode ? "assets/images/png/logo.png" : "assets/images/png/logo_dark.png", height: 25),
+    title: title ?? Image.asset(isDarkMode ? "assets/images/png/logo.png" : "assets/images/png/logo_dark.png", height: 25, color: Theme.of(context).primaryColor),
     centerTitle: true,
     elevation: 0,
     foregroundColor: Theme.of(context).primaryColor,
